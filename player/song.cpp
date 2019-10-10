@@ -3,79 +3,81 @@
 #include <iostream>
 #include <chrono>
 #include <sstream>
-#include <QObject>
+#include <string>
+#include <memory>
+#include <unordered_map>
+#include "taglib/fileref.h"
+#include "taglib/tag.h"
+#include "taglib/audioproperties.h"
 
-Song::Song(QString &path, QMediaPlayer* mediaPlayer, QObject *qParent) noexcept {
+using WideStream = std::basic_ostream<wchar_t>;
+
+Song::Song(QString &path, QString&& tit, QString&& alb, QString&& art, int&& dur) noexcept {
     pathname = path;
-    parent = qParent;
-    player = mediaPlayer;
-    this->getSongMetaData();
+    album = std::move(alb);
+    artist = std::move(art);
+    title = std::move(tit);
+    std::chrono::seconds sec { std::move(dur) };
+    std::chrono::milliseconds ms { std::chrono::duration_cast<std::chrono::milliseconds>(sec) };
+    duration = ms.count();
 }
 
-Song::~Song() {
-//    delete player;
-//    player = nullptr;
-}
+Song::~Song() {}
 
-//std::ostream& Song::operator << (std::ostream& os) noexcept {
-//    os << title.toStdString() << ", " << album.toStdString() << ", " << artist.toStdString() << ", " << formatDurationToQString().toStdString();
+//std::ostream& operator << (std::ostream& os, const Song& song) noexcept {
+//    os << song.pathname.toStdString().c_str() << ", " << song.title.toStdString().c_str() << ", " << song.album.toStdString().c_str() << ", " << song.artist.toStdString().c_str() << ", " << song.duration << std::endl;
 //    return os;
 //}
 
-Song::operator const char *() noexcept {
+Song::operator const char* () noexcept {
     std::stringstream ss;
-    ss << title.toStdString() << ", "  << album.toStdString() << ", " << artist.toStdString() << ", " << formatDurationToQString().toStdString();
+    ss << pathname.toStdString() << "\t" << title.toStdString() << "\t"  << artist.toStdString() << "\t" << album.toStdString() << "\t" << duration;
+    std::cout << ss.str() << std::endl;
+    std::wstring out(ss.str().cbegin(), ss.str().cend());
 //    return ss.str().c_str();
-    std::cout << this->getTitle() << std::endl;
-    return "test str";
+//    std::wstring str = L"test";
+    std::string str = "markiian lukashiv";
+    return str.c_str();
 }
 
 std::string Song::getTitle() noexcept {
-    std::string replacement = "replacement";
-    if (this->title.isEmpty()) return replacement;
-    else return this->title.toStdString();
+    return this->title.toStdString();
 }
 
-//void Song::getSongInfo() noexcept {
-//    player = new QMediaPlayer();
-//    QObject::connect(player,
-//            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
-//            this,
-//            SLOT(onMediaChanged(QMediaPlayer::MediaStatus)));
-//    player->setMedia(QUrl::fromLocalFile(pathname));
-//}
+std::string Song::getStdPath() noexcept {
+    return this->pathname.toStdString();
+}
 
-void Song::onMediaChanged(QMediaPlayer::MediaStatus status) noexcept {
-    if (status == QMediaPlayer::LoadedMedia) {
-        std::cout << "here" << std::endl;
-//        this->getSongMetaData();
+QString Song::getQStrPath() noexcept {
+    return this->pathname;
+}
 
+QString Song::show() const noexcept {
+    return this->title + this->album + this->artist + this->formatDurationToQString();
+}
+
+std::unordered_map<std::string, std::unique_ptr<Song>> Song::getSongsMap(const std::vector<std::string>& songsPathes) noexcept {
+    std::unordered_map<std::string, std::unique_ptr<Song>> songsMap;
+    for (const std::string& path : songsPathes) {
+        TagLib::FileRef f(path.c_str());
+        if (!f.isNull() && f.tag()) {
+            TagLib::Tag* tag = f.tag();
+
+            QString Qpath = path.c_str();
+            std::unique_ptr<Song> songPtr(new Song(Qpath,
+                                                   std::move(QString(tag->title().to8Bit(true).c_str())),
+                                                   std::move(QString(tag->album().to8Bit(true).c_str())),
+                                                   std::move(QString(tag->artist().to8Bit(true).c_str())),
+                                                   std::move(f.audioProperties()->length())
+                                                   ));
+            songsMap.insert(std::make_pair(songPtr->show().toStdString(), std::move(songPtr)));
+        }
     }
+
+    return songsMap;
 }
 
-void Song::getSongMetaData() noexcept {
-    QStringList metadatalist = this->player->availableMetaData();
-    int list_size = metadatalist.size();
-    QString metadata_key;
-    duration = static_cast<int>(player->duration());
-
-    for (int i = 0; i < list_size; ++i)
-    {
-      metadata_key = metadatalist.at(i);
-
-      if (metadata_key == "Album") {
-          album = player->metaData(metadata_key).toString();
-      }
-      if (metadata_key == "Title") {
-          title = player->metaData(metadata_key).toString();
-      }
-      if (metadata_key == "Artist") {
-          artist = player->metaData(metadata_key).toString();
-      }
-    }
-}
-
-QString&& Song::formatDurationToQString() noexcept {
+QString Song::formatDurationToQString() const noexcept {
     auto durationInMS = std::chrono::milliseconds(duration);
     auto secs = std::chrono::duration_cast<std::chrono::seconds>(durationInMS);
     durationInMS -= std::chrono::duration_cast<std::chrono::milliseconds>(secs);
@@ -84,6 +86,6 @@ QString&& Song::formatDurationToQString() noexcept {
 
     std::stringstream ss;
     ss << mins.count() << ":" << secs.count();
-    return QString(ss.str().c_str());
+    return std::move(QString(ss.str().c_str()));
 }
 

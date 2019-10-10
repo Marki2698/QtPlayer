@@ -18,12 +18,17 @@ SOURCES += main.cpp\
         musicapp.cpp \
     fs.cpp \
     db.cpp \
-    song.cpp
+    song.cpp \
+    filestorage.cpp
 
 HEADERS  += musicapp.h \
     fs.h \
     db.h \
     song.h \
-    statuses.h
+    statuses.h \
+    storage.h \
+    filestorage.h
 
 FORMS    += musicapp.ui
+
+LIBS += -ltag

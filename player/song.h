@@ -2,38 +2,37 @@
 #define SONG_H
 
 #include <QMediaPlayer>
-#include <QObject>
 #include <QString>
-#include <iostream>
-#include <chrono>
 #include <string>
+#include <iostream>
+#include <unordered_map>
+#include <memory>
 
-class Song: public QObject
+using WideStream = std::basic_ostream<wchar_t>;
+
+
+class Song
 {
-    Q_OBJECT
 public:
-    explicit Song(QString& path, QMediaPlayer* mediaPlayer, QObject* qParent = 0) noexcept;
+    explicit Song(QString& path, QString&& tit, QString&& alb, QString&& art, int&& dur) noexcept;
     Song(Song&& source) noexcept;
     Song& operator =(Song&& source) noexcept;
     ~Song();
-//    std::ostream& operator << (std::ostream& os) noexcept;
     operator const char* () noexcept;
+//    friend std::ostream& operator << (std::ostream& os, const Song& song) noexcept;
     std::string getTitle() noexcept;
-
-public slots:
-    void onMediaChanged(QMediaPlayer::MediaStatus status) noexcept;
+    std::string getStdPath() noexcept;
+    QString getQStrPath() noexcept;
+    QString show() const noexcept;
+    static std::unordered_map<std::string, std::unique_ptr<Song>> getSongsMap(const std::vector<std::string>& songsPathes) noexcept;
 
     private:
-        QObject* parent;
         QString pathname;
         QString title;
         QString album;
         QString artist;
         unsigned int duration;
-        QMediaPlayer* player = nullptr;
-//        void getSongInfo() noexcept;
-        void getSongMetaData() noexcept;
-        QString&& formatDurationToQString() noexcept;
+        QString formatDurationToQString() const noexcept;
 };
 
 #endif // SONG_H

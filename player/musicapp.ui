@@ -66,7 +66,7 @@
      <string>shut down pc</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="amountOfRepeats">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -105,14 +105,27 @@
      <string>title of song</string>
     </property>
    </widget>
-   <widget class="QListView" name="listOfSongs">
+   <widget class="QListWidget" name="listOfSongs">
     <property name="geometry">
      <rect>
-      <x>5</x>
+      <x>0</x>
       <y>0</y>
-      <width>391</width>
+      <width>401</width>
       <height>192</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="loopCurrentSong">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>230</y>
+      <width>97</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>loop song</string>
     </property>
    </widget>
   </widget>
