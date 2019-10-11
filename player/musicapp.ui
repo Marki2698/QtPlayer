@@ -17,7 +17,7 @@
    <widget class="QPushButton" name="prevSong">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>100</x>
       <y>230</y>
       <width>31</width>
       <height>27</height>
@@ -30,7 +30,7 @@
    <widget class="QPushButton" name="nextSong">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>250</x>
       <y>230</y>
       <width>31</width>
       <height>27</height>
@@ -43,21 +43,31 @@
    <widget class="QPushButton" name="playAndPause">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>230</y>
-      <width>41</width>
-      <height>27</height>
+      <x>150</x>
+      <y>220</y>
+      <width>81</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
-     <string>&gt;||</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="resources.qrc">
+      <normaloff>:/recources/images/play.png</normaloff>:/recources/images/play.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>48</width>
+      <height>48</height>
+     </size>
     </property>
    </widget>
    <widget class="QCheckBox" name="shutDownPC">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>280</y>
+      <x>260</x>
+      <y>290</y>
       <width>121</width>
       <height>22</height>
      </rect>
@@ -69,8 +79,8 @@
    <widget class="QLineEdit" name="amountOfRepeats">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>270</y>
+      <x>20</x>
+      <y>280</y>
       <width>31</width>
       <height>27</height>
      </rect>
@@ -82,8 +92,8 @@
    <widget class="QLabel" name="amountOfRepeates">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>280</y>
+      <x>60</x>
+      <y>290</y>
       <width>161</width>
       <height>17</height>
      </rect>
@@ -95,14 +105,23 @@
    <widget class="QLabel" name="title">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>10</x>
       <y>200</y>
-      <width>101</width>
+      <width>381</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="text">
      <string>title of song</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QListWidget" name="listOfSongs">
@@ -115,17 +134,21 @@
      </rect>
     </property>
    </widget>
-   <widget class="QCheckBox" name="loopCurrentSong">
+   <widget class="QPushButton" name="loopBtn">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>338</x>
       <y>230</y>
-      <width>97</width>
-      <height>22</height>
+      <width>41</width>
+      <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>loop song</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="resources.qrc">
+      <normaloff>:/recources/images/loop_off.png</normaloff>:/recources/images/loop_off.png</iconset>
     </property>
    </widget>
   </widget>
@@ -162,6 +185,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

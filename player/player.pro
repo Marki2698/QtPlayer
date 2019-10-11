@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     fs.cpp \
     db.cpp \
     song.cpp \
-    filestorage.cpp
+    filestorage.cpp \
+    loop.cpp
 
 HEADERS  += musicapp.h \
     fs.h \
@@ -27,8 +28,12 @@ HEADERS  += musicapp.h \
     song.h \
     statuses.h \
     storage.h \
-    filestorage.h
+    filestorage.h \
+    loop.h
 
 FORMS    += musicapp.ui
 
 LIBS += -ltag
+
+RESOURCES += \
+    resources.qrc

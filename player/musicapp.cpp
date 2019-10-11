@@ -3,6 +3,7 @@
 #include "fs.h"
 #include "song.h"
 #include "db.h"
+#include "loop.h"
 #include "taglib/fileref.h"
 #include "taglib/tag.h"
 #include "taglib/audioproperties.h"
@@ -21,6 +22,7 @@
 #include <QMediaMetaData>
 #include <QMediaPlaylist>
 #include <QUrl>
+#include <QPixmap>
 #include <fstream>
 #include <string>
 
@@ -31,10 +33,12 @@ void createUTF8File(const std::string filename) {
     }
 }
 
+
 MusicApp::MusicApp(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MusicApp),
-    player(new QMediaPlayer)
+    player(new QMediaPlayer),
+    loop(new Loop)
 {
     std::string name = "stub.txt";
     createUTF8File(name);
@@ -47,6 +51,7 @@ MusicApp::MusicApp(QWidget *parent) :
     connect(ui->playAndPause, SIGNAL(clicked()), this, SLOT(onPlayPauseClick()));
     connect(ui->nextSong, SIGNAL(clicked()), this, SLOT(onNextSongClick()));
     connect(ui->prevSong, SIGNAL(clicked()), this, SLOT(onPrevSongClick()));
+    connect(ui->loopBtn, SIGNAL(clicked()), this, SLOT(onLoopBtnClick()));
 
     songsMap = Song::getSongsMap(dbPtr->getSongsPathes());
 
@@ -62,8 +67,9 @@ MusicApp::MusicApp(QWidget *parent) :
 void MusicApp::onItemDBClicked(QListWidgetItem* item) noexcept {
     int id = ui->listOfSongs->row(item);
     player->playlist()->setCurrentIndex(id);
+    player->play();
 
-    connect(player, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this, SLOT(onRetrieveSongData(QMediaPlayer::MediaStatus)));
+    ui->playAndPause->setIcon(QPixmap(":/recources/images/pause.png"));
 }
 
 void MusicApp::onPlayPauseClick() noexcept {
@@ -73,6 +79,9 @@ void MusicApp::onPlayPauseClick() noexcept {
     } else {
         player->pause();
     }
+
+    QPixmap icon = isPlaying ? QPixmap(":/recources/images/pause.png") : QPixmap(":/recources/images/play.png");
+    ui->playAndPause->setIcon(icon);
 }
 
 void MusicApp::onNextSongClick() noexcept {
@@ -83,6 +92,12 @@ void MusicApp::onNextSongClick() noexcept {
 void MusicApp::onPrevSongClick() noexcept {
     player->playlist()->previous();
     changeTitle();
+}
+
+void MusicApp::onLoopBtnClick() noexcept {
+    auto loopMode = loop->nextLoopMode();
+    player->playlist()->setPlaybackMode(loopMode.first);
+    ui->loopBtn->setIcon(loopMode.second);
 }
 
 void MusicApp::changeTitle() noexcept {
@@ -110,65 +125,12 @@ void MusicApp::on_addMusic_triggered() noexcept {
         dbPtr->addSongsPathes(songsPathes);
 
     }
-
-//    player = new QMediaPlayer();
-//    QObject::connect(player,
-//                     SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
-//                     this,
-//                     SLOT(onRetrieveSongData(QMediaPlayer::MediaStatus))
-//                     );
-
-//    player->setPlaylist(playlist);
-}
-
-void MusicApp::onRetrieveSongs(QMediaPlayer::MediaStatus status) noexcept {
-    if (status == QMediaPlayer::MediaStatus::LoadedMedia) {
-        std::cout << "here" << std::endl;
-        // isAssert error .first() method
-//        while (player->playlist()->currentIndex() < player->playlist()->mediaCount() ) {
-//            for (QMediaResource resource : player->playlist()->currentMedia().resources()) {
-//                std::cout << resource.url().path().toStdString() << std::endl;
-//            }
-
-//            player->playlist()->setCurrentIndex(player->playlist()->nextIndex());
-//        }
-
-
-//        for (QMediaResource resource : player->playlist()->currentMedia().resources()) {
-//            std::cout << resource.url().path().toStdString() << std::endl;
-//        }
-
-//        std::cout << player->media().resources().size() << std::endl;
-//        for (QMediaContent content : player->media().resources()) {
-//            std::cout << content.resources().first().url().path().toStdString() << std::endl;
-//        }
-//        delete player;
-
-//        for (QMediaResource resource : player->media().resources()) {
-//            std::cout << resource.url().path().toStdString() << std::endl;
-//        }
-
-//        QStringListModel* model = new QStringListModel();
-//        QStringList list;
-//        list << player->metaData(QMediaMetaData::Title).toStringList();
-//        model->setStringList(list);
-//        ui->listOfSongs->setModel(model);
-//        player->play();
-    }
-}
-
-void MusicApp::onRetrieveSongData(QMediaPlayer::MediaStatus status) noexcept{
-    if (status == QMediaPlayer::MediaStatus::LoadedMedia) {
-//        player->metaData(QMediaMetaData::)
-        player->play();
-        changeTitle();
-        isPlaying = true;
-    }
 }
 
 MusicApp::~MusicApp()
 {
 //    player->stop();
+    delete loop;
     delete player;
     delete ui;
 }
