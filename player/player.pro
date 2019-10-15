@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     db.cpp \
     song.cpp \
     filestorage.cpp \
-    loop.cpp
+    loop.cpp \
+    shuffle.cpp
 
 HEADERS  += musicapp.h \
     fs.h \
@@ -29,7 +30,8 @@ HEADERS  += musicapp.h \
     statuses.h \
     storage.h \
     filestorage.h \
-    loop.h
+    loop.h \
+    shuffle.h
 
 FORMS    += musicapp.ui
 

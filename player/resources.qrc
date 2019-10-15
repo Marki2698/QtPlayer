@@ -5,5 +5,7 @@
         <file>images/loop.png</file>
         <file>images/pause.png</file>
         <file>images/play.png</file>
+        <file>images/shuffle_off.png</file>
+        <file>images/shuffle_on.png</file>
     </qresource>
 </RCC>

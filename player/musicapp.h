@@ -11,6 +11,7 @@
 #include "db.h"
 #include "song.h"
 #include "loop.h"
+#include "shuffle.h"
 
 namespace Ui {
 class MusicApp;
@@ -31,13 +32,19 @@ public slots:
     void onNextSongClick() noexcept;
     void onPrevSongClick() noexcept;
     void onLoopBtnClick() noexcept;
+    void onShuffleBtnClick() noexcept;
+    void onCurrentMediaChanged(int id) noexcept;
 
 private:
     bool isPlaying = false;
     Ui::MusicApp *ui;
     QMediaPlayer* player;
-    Loop* loop; // possibly make dynamically allocated
+    QMediaPlaylist* playlist;
+    int currentPlayingId = 0;
+    Loop* loop;
+    Shuffle* shuffle;
     std::unique_ptr<DB> dbPtr;
+    // add pointer to Item and set selected it and on mediaChanged set
     std::unordered_map<std::string, std::unique_ptr<Song>> songsMap;
     void changeTitle() noexcept;
 

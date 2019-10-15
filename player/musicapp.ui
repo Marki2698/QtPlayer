@@ -151,6 +151,23 @@
       <normaloff>:/recources/images/loop_off.png</normaloff>:/recources/images/loop_off.png</iconset>
     </property>
    </widget>
+   <widget class="QPushButton" name="shuffleBtn">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>230</y>
+      <width>31</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="resources.qrc">
+      <normaloff>:/recources/images/shuffle_off.png</normaloff>:/recources/images/shuffle_off.png</iconset>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

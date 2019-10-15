@@ -4,6 +4,7 @@
 #include "song.h"
 #include "db.h"
 #include "loop.h"
+#include "shuffle.h"
 #include "taglib/fileref.h"
 #include "taglib/tag.h"
 #include "taglib/audioproperties.h"
@@ -14,6 +15,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QList>
 #include <QMediaPlayer>
 #include <QFile>
 #include <QFileInfo>
@@ -23,6 +25,7 @@
 #include <QMediaPlaylist>
 #include <QUrl>
 #include <QPixmap>
+#include <Qt>
 #include <fstream>
 #include <string>
 
@@ -38,7 +41,8 @@ MusicApp::MusicApp(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MusicApp),
     player(new QMediaPlayer),
-    loop(new Loop)
+    loop(new Loop),
+    shuffle(new Shuffle)
 {
     std::string name = "stub.txt";
     createUTF8File(name);
@@ -47,20 +51,24 @@ MusicApp::MusicApp(QWidget *parent) :
     ui->listOfSongs->setSelectionMode(QAbstractItemView::ExtendedSelection);
     dbPtr.reset(new DB(std::move(true)));
 
-    connect(ui->listOfSongs, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDBClicked(QListWidgetItem*)));
-    connect(ui->playAndPause, SIGNAL(clicked()), this, SLOT(onPlayPauseClick()));
-    connect(ui->nextSong, SIGNAL(clicked()), this, SLOT(onNextSongClick()));
-    connect(ui->prevSong, SIGNAL(clicked()), this, SLOT(onPrevSongClick()));
-    connect(ui->loopBtn, SIGNAL(clicked()), this, SLOT(onLoopBtnClick()));
-
     songsMap = Song::getSongsMap(dbPtr->getSongsPathes());
 
-    QMediaPlaylist* playlist = new QMediaPlaylist; // maybe leak
+    playlist = new QMediaPlaylist;
+
     for (const auto& song : songsMap) {
         playlist->addMedia(QUrl::fromLocalFile(song.second->getQStrPath()));
         ui->listOfSongs->addItem(song.second->show());
     }
     player->setPlaylist(playlist);
+
+
+    connect(ui->listOfSongs, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDBClicked(QListWidgetItem*)));
+    connect(ui->playAndPause, SIGNAL(clicked()), this, SLOT(onPlayPauseClick()));
+    connect(ui->nextSong, SIGNAL(clicked()), this, SLOT(onNextSongClick()));
+    connect(ui->prevSong, SIGNAL(clicked()), this, SLOT(onPrevSongClick()));
+    connect(ui->loopBtn, SIGNAL(clicked()), this, SLOT(onLoopBtnClick()));
+    connect(ui->shuffleBtn, SIGNAL(clicked()), this, SLOT(onShuffleBtnClick()));
+    connect(playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(onCurrentMediaChanged(int)));
 
 }
 
@@ -100,6 +108,18 @@ void MusicApp::onLoopBtnClick() noexcept {
     ui->loopBtn->setIcon(loopMode.second);
 }
 
+void MusicApp::onShuffleBtnClick() noexcept {
+    auto shuffleMode = shuffle->nextShuffleMode();
+    player->playlist()->setPlaybackMode(shuffleMode.first);
+    ui->shuffleBtn->setIcon(shuffleMode.second);
+}
+
+void MusicApp::onCurrentMediaChanged(int id) noexcept {
+    ui->listOfSongs->item(currentPlayingId)->setSelected(false);
+    currentPlayingId = id;
+    ui->listOfSongs->item(currentPlayingId)->setSelected(true);
+}
+
 void MusicApp::changeTitle() noexcept {
     ui->title->setText(player->metaData(QMediaMetaData::Title).toString());
 }
@@ -129,8 +149,8 @@ void MusicApp::on_addMusic_triggered() noexcept {
 
 MusicApp::~MusicApp()
 {
-//    player->stop();
     delete loop;
+    delete shuffle;
     delete player;
     delete ui;
 }
