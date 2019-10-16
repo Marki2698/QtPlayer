@@ -3,6 +3,7 @@
 #include "statuses.h"
 #include "storage.h"
 #include "filestorage.h"
+#include "utils.h"
 
 #include <fstream>
 #include <iostream>
@@ -12,10 +13,15 @@
 #include <QStringList>
 
 
+//template<class T, class... Args>
+//std::unique_ptr<T> make_unique(Args&&... args) noexcept {
+//    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+//}
+
 DB::DB(bool &&stubMode) noexcept {
     std::cout << "open connection" << std::endl;
     if(stubMode) {
-        storage = new FileStorage();
+        storage = make_unique<FileStorage>();
     } else {
         // open connection to real DB;
         // storage = new DBStorage();
@@ -24,7 +30,7 @@ DB::DB(bool &&stubMode) noexcept {
 
 DB::~DB() noexcept {
     std::cout << "close connection" << std::endl;
-    delete storage;
+//    delete storage;
 }
 
 void DB::addSongsPathes(const std::vector<std::string>& songs) const noexcept {

@@ -37,14 +37,13 @@ public slots:
 
 private:
     bool isPlaying = false;
-    Ui::MusicApp *ui;
-    QMediaPlayer* player;
-    QMediaPlaylist* playlist;
+    std::unique_ptr<Ui::MusicApp> ui;
+    std::unique_ptr<QMediaPlayer> player;
+    std::unique_ptr<QMediaPlaylist> playlist;
     int currentPlayingId = 0;
-    Loop* loop;
-    Shuffle* shuffle;
+    std::unique_ptr<Loop> loop;
+    std::unique_ptr<Shuffle> shuffle;
     std::unique_ptr<DB> dbPtr;
-    // add pointer to Item and set selected it and on mediaChanged set
     std::unordered_map<std::string, std::unique_ptr<Song>> songsMap;
     void changeTitle() noexcept;
 

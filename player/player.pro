@@ -31,7 +31,8 @@ HEADERS  += musicapp.h \
     storage.h \
     filestorage.h \
     loop.h \
-    shuffle.h
+    shuffle.h \
+    utils.h
 
 FORMS    += musicapp.ui
 

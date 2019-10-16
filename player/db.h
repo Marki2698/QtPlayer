@@ -12,8 +12,6 @@
 
 #include <QStringList>
 
-//const bool STUB_MODE = true;
-
 
 class DB
 {
@@ -28,7 +26,7 @@ public:
     std::vector<std::string> getSongsPathes() const noexcept;
     void removeSongs(const QStringList& absPathesToSongs) const noexcept;
 private:
-    AbstractStorage* storage = nullptr;
+    std::unique_ptr<AbstractStorage> storage;
 };
 
 #endif // DB_H

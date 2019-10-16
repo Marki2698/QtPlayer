@@ -8,6 +8,7 @@
 #include "taglib/fileref.h"
 #include "taglib/tag.h"
 #include "taglib/audioproperties.h"
+#include "utils.h"
 
 #include <iostream>
 #include <memory>
@@ -29,37 +30,29 @@
 #include <fstream>
 #include <string>
 
-void createUTF8File(const std::string filename) {
-    if (!QFileInfo::exists(QString(filename.c_str()))) {
-        FILE* file = fopen(filename.c_str(), "a+, ccs=UTF-8");
-        fclose(file);
-    }
-}
-
 
 MusicApp::MusicApp(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MusicApp),
-    player(new QMediaPlayer),
-    loop(new Loop),
-    shuffle(new Shuffle)
+    ui(make_unique<Ui::MusicApp>()),
+    player(make_unique<QMediaPlayer>()),
+    loop(make_unique<Loop>()),
+    shuffle(make_unique<Shuffle>()),
+    dbPtr(make_unique<DB, bool>(true))
 {
-    std::string name = "stub.txt";
-    createUTF8File(name);
+    fs::createUTF8File(STUB_FILE_PATH);
 
     ui->setupUi(this);
     ui->listOfSongs->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    dbPtr.reset(new DB(std::move(true)));
 
     songsMap = Song::getSongsMap(dbPtr->getSongsPathes());
 
-    playlist = new QMediaPlaylist;
+    playlist = make_unique<QMediaPlaylist>();
 
     for (const auto& song : songsMap) {
         playlist->addMedia(QUrl::fromLocalFile(song.second->getQStrPath()));
         ui->listOfSongs->addItem(song.second->show());
     }
-    player->setPlaylist(playlist);
+    player->setPlaylist(playlist.get());
 
 
     connect(ui->listOfSongs, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDBClicked(QListWidgetItem*)));
@@ -68,8 +61,7 @@ MusicApp::MusicApp(QWidget *parent) :
     connect(ui->prevSong, SIGNAL(clicked()), this, SLOT(onPrevSongClick()));
     connect(ui->loopBtn, SIGNAL(clicked()), this, SLOT(onLoopBtnClick()));
     connect(ui->shuffleBtn, SIGNAL(clicked()), this, SLOT(onShuffleBtnClick()));
-    connect(playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(onCurrentMediaChanged(int)));
-
+    connect(playlist.get(), SIGNAL(currentIndexChanged(int)), this, SLOT(onCurrentMediaChanged(int)));
 }
 
 void MusicApp::onItemDBClicked(QListWidgetItem* item) noexcept {
@@ -147,10 +139,4 @@ void MusicApp::on_addMusic_triggered() noexcept {
     }
 }
 
-MusicApp::~MusicApp()
-{
-    delete loop;
-    delete shuffle;
-    delete player;
-    delete ui;
-}
+MusicApp::~MusicApp() {}

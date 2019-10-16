@@ -13,9 +13,8 @@ class fs
 public:
     fs() {}
     ~fs() {}
-//    static writeData();
-    static std::string readData(const std::string& filePath = STUB_FILE_PATH);
     static QStringList chooseSongsToAdd(MusicApp* parent) noexcept;
+    static void createUTF8File(const std::string filename);
 };
 
 #endif // FS_H
