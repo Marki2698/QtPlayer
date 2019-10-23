@@ -24,7 +24,7 @@ public:
     std::string getStdPath() noexcept;
     QString getQStrPath() noexcept;
     QString show() const noexcept;
-    static std::unordered_map<std::string, std::unique_ptr<Song>> getSongsMap(const std::vector<std::string>& songsPathes) noexcept;
+    static std::unordered_map<std::string, std::shared_ptr<Song>> getSongsMap(const std::vector<std::string>& songsPathes) noexcept;
 
     private:
         QString pathname;

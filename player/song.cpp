@@ -56,20 +56,26 @@ QString Song::show() const noexcept {
     return this->title + this->album + this->artist + this->formatDurationToQString();
 }
 
-std::unordered_map<std::string, std::unique_ptr<Song>> Song::getSongsMap(const std::vector<std::string>& songsPathes) noexcept {
-    std::unordered_map<std::string, std::unique_ptr<Song>> songsMap;
+std::unordered_map<std::string, std::shared_ptr<Song>> Song::getSongsMap(const std::vector<std::string>& songsPathes) noexcept {
+    std::unordered_map<std::string, std::shared_ptr<Song>> songsMap;
     for (const std::string& path : songsPathes) {
         TagLib::FileRef f(path.c_str());
         if (!f.isNull() && f.tag()) {
             TagLib::Tag* tag = f.tag();
 
             QString Qpath = path.c_str();
-            std::unique_ptr<Song> songPtr(new Song(Qpath,
-                                                   std::move(QString(tag->title().to8Bit(true).c_str())),
-                                                   std::move(QString(tag->album().to8Bit(true).c_str())),
-                                                   std::move(QString(tag->artist().to8Bit(true).c_str())),
-                                                   std::move(f.audioProperties()->length())
-                                                   ));
+            std::shared_ptr<Song> songPtr = std::make_shared<Song>(Qpath,
+                                                                   std::move(QString(tag->title().to8Bit(true).c_str())),
+                                                                   std::move(QString(tag->album().to8Bit(true).c_str())),
+                                                                   std::move(QString(tag->artist().to8Bit(true).c_str())),
+                                                                   std::move(f.audioProperties()->length())
+                                                                   );
+//            std::unique_ptr<Song> songPtr(new Song(Qpath,
+//                                                   std::move(QString(tag->title().to8Bit(true).c_str())),
+//                                                   std::move(QString(tag->album().to8Bit(true).c_str())),
+//                                                   std::move(QString(tag->artist().to8Bit(true).c_str())),
+//                                                   std::move(f.audioProperties()->length())
+//                                                   ));
             songsMap.insert(std::make_pair(songPtr->show().toStdString(), std::move(songPtr)));
         }
     }

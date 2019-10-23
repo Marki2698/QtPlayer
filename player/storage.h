@@ -14,6 +14,7 @@ public:
     virtual ~AbstractStorage() {}
     virtual void insertSongsPathes(const std::vector<std::string> &songs) = 0;
     virtual std::vector<std::string> getSongsPathes() = 0;
+    virtual std::unordered_map<std::string, std::vector<std::string>> getPlaylistsSongsPathes() = 0;
     virtual void deleteSongsPathes(const QStringList& absPathesToSongs) = 0;
 };
 

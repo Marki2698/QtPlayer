@@ -7,21 +7,25 @@
 #include <vector>
 #include <memory>
 #include <fstream>
+#include <string>
 #include <unordered_map>
 
 
 class FileStorage: public AbstractStorage {
 public:
-    FileStorage() {}
+    FileStorage(std::string songFile, std::string playDir): songsFileName(songFile), playlistsDir(playDir) {}
     ~FileStorage() {}
     void insertSongsPathes(const std::vector<std::string> &songs) noexcept;
     std::vector<std::string> getSongsPathes() noexcept;
+    std::unordered_map<std::string, std::vector<std::string>> getPlaylistsSongsPathes() noexcept;
     void deleteSongsPathes(const QStringList &absPathesToSongs) noexcept;
     bool isEmpty(std::fstream& fileStream) const noexcept;
 
 private:
     std::fstream stubFile;
-    void openFileStream() noexcept;
+    std::string songsFileName;
+    std::string playlistsDir;
+    void openFileStream(const std::string& fileName) noexcept;
     void closeFileStream() noexcept;
 };
 

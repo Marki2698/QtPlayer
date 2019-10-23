@@ -13,32 +13,31 @@
 #include <QStringList>
 
 
-//template<class T, class... Args>
-//std::unique_ptr<T> make_unique(Args&&... args) noexcept {
-//    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-//}
+DB::DB() noexcept {
+    //default contructor for creating connection with real DB;
+    // storage = make_unique<DBStorage>();
+}
 
-DB::DB(bool &&stubMode) noexcept {
+DB::DB(const std::string& filename, const std::string& playlistDir) noexcept {
     std::cout << "open connection" << std::endl;
-    if(stubMode) {
-        storage = make_unique<FileStorage>();
-    } else {
-        // open connection to real DB;
-        // storage = new DBStorage();
-    }
+    storage = make_unique<FileStorage>(filename, playlistDir);
 }
 
 DB::~DB() noexcept {
     std::cout << "close connection" << std::endl;
-//    delete storage;
 }
 
+// rename to addSongs
 void DB::addSongsPathes(const std::vector<std::string>& songs) const noexcept {
     storage->insertSongsPathes(songs);
 }
 
 std::vector<std::string> DB::getSongsPathes() const noexcept {
     return storage->getSongsPathes();
+}
+
+std::unordered_map<std::string, std::vector<std::string>> DB::getPlaylistsSongsPathes() const noexcept {
+    return storage->getPlaylistsSongsPathes();
 }
 
 void DB::removeSongs(const QStringList &absPathesToSongs) const noexcept{

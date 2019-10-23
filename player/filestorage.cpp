@@ -7,12 +7,14 @@
 #include <vector>
 #include <memory>
 #include <QStringList>
+#include <QDir>
 #include <string>
 #include <iostream>
 #include <unordered_map>
 
-void FileStorage::openFileStream() noexcept {
-    stubFile.open(STUB_FILE_PATH, std::ios::in | std::ios::out | std::ios::app);
+void FileStorage::openFileStream(const std::string& fileName) noexcept {
+    std::cout << fileName << std::endl;
+    stubFile.open(fileName, std::ios::in | std::ios::out | std::ios::app);
 }
 
 void FileStorage::closeFileStream() noexcept {
@@ -20,9 +22,9 @@ void FileStorage::closeFileStream() noexcept {
 }
 
 void FileStorage::insertSongsPathes(const std::vector<std::string>& songs) noexcept {
-    openFileStream();
+    openFileStream(songsFileName);
     for (const auto& path : songs) {
-        stubFile << path << std::endl;
+        stubFile << path << "\n";
     }
     closeFileStream();
 }
@@ -31,7 +33,7 @@ std::vector<std::string> FileStorage::getSongsPathes() noexcept {
     std::vector<std::string> pathes;
     std::string path;
 
-    openFileStream();
+    openFileStream(songsFileName);
     while(std::getline(stubFile, path)) {
         pathes.push_back(path);
         path.erase();
@@ -39,6 +41,31 @@ std::vector<std::string> FileStorage::getSongsPathes() noexcept {
     closeFileStream();
 
     return pathes;
+}
+
+std::unordered_map<std::string, std::vector<std::string>> FileStorage::getPlaylistsSongsPathes() noexcept {
+    QDir dir(playlistsDir.c_str());
+    QFileInfoList listOfFiles  = dir.entryInfoList(QDir::Files);
+
+    std::unordered_map<std::string, std::vector<std::string>> playlistsMap;
+
+    for (QFileInfo item : listOfFiles) {
+
+        openFileStream((playlistsDir + "/" + item.fileName().toStdString()));
+        std::string path;
+        std::vector<std::string> pathes;
+
+        while(std::getline(stubFile, path)) {
+            pathes.emplace_back(path);
+            path.erase();
+        }
+        closeFileStream();
+        playlistsMap.insert({item.baseName().toStdString(), pathes});
+    }
+
+    return playlistsMap;
+
+
 }
 
 bool FileStorage::isEmpty(std::fstream &fileStream) const noexcept {

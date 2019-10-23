@@ -124,16 +124,6 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QListWidget" name="listOfSongs">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>401</width>
-      <height>192</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="loopBtn">
     <property name="geometry">
      <rect>
@@ -168,6 +158,59 @@
       <normaloff>:/recources/images/shuffle_off.png</normaloff>:/recources/images/shuffle_off.png</iconset>
     </property>
    </widget>
+   <widget class="QTabWidget" name="tabs">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>401</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="songs">
+     <attribute name="title">
+      <string>Songs</string>
+     </attribute>
+     <widget class="QListWidget" name="listOfSongs">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>381</width>
+        <height>161</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="playlists">
+     <attribute name="title">
+      <string>Playlists</string>
+     </attribute>
+     <widget class="QListWidget" name="listOfPlaylists">
+      <property name="geometry">
+       <rect>
+        <x>-5</x>
+        <y>1</y>
+        <width>201</width>
+        <height>161</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="listOfSongsInPlaylist">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>0</y>
+        <width>201</width>
+        <height>161</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -183,6 +226,7 @@
      <string>Music</string>
     </property>
     <addaction name="addMusic"/>
+    <addaction name="addPlaylist"/>
    </widget>
    <addaction name="menuMusic"/>
   </widget>
@@ -198,6 +242,11 @@
   <action name="addMusic">
    <property name="text">
     <string>Add music </string>
+   </property>
+  </action>
+  <action name="addPlaylist">
+   <property name="text">
+    <string>Create playlist</string>
    </property>
   </action>
  </widget>
