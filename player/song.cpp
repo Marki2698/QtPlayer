@@ -10,7 +10,6 @@
 #include "taglib/tag.h"
 #include "taglib/audioproperties.h"
 
-using WideStream = std::basic_ostream<wchar_t>;
 
 Song::Song(QString &path, QString&& tit, QString&& alb, QString&& art, int&& dur) noexcept {
     pathname = path;
@@ -70,12 +69,6 @@ std::unordered_map<std::string, std::shared_ptr<Song>> Song::getSongsMap(const s
                                                                    std::move(QString(tag->artist().to8Bit(true).c_str())),
                                                                    std::move(f.audioProperties()->length())
                                                                    );
-//            std::unique_ptr<Song> songPtr(new Song(Qpath,
-//                                                   std::move(QString(tag->title().to8Bit(true).c_str())),
-//                                                   std::move(QString(tag->album().to8Bit(true).c_str())),
-//                                                   std::move(QString(tag->artist().to8Bit(true).c_str())),
-//                                                   std::move(f.audioProperties()->length())
-//                                                   ));
             songsMap.insert(std::make_pair(songPtr->show().toStdString(), std::move(songPtr)));
         }
     }

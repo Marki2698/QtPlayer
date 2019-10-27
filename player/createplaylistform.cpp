@@ -37,10 +37,7 @@ CreatePlaylistForm::CreatePlaylistForm(QListWidget* const songList, QWidget *par
     connect(ui->selectAll, SIGNAL(clicked()), this, SLOT(onSelectAllClicked()));
 }
 
-CreatePlaylistForm::~CreatePlaylistForm()
-{
-//    delete ui;
-}
+CreatePlaylistForm::~CreatePlaylistForm() {}
 
 
 void CreatePlaylistForm::onSelectAllClicked() noexcept {
@@ -58,7 +55,7 @@ void CreatePlaylistForm::onCancelClicked() noexcept {
 void CreatePlaylistForm::onCreateClicked() noexcept {
     if (ui->nameOfPlaylist->text().size() != 0) {
         QString playlistName = ui->nameOfPlaylist->text();
-        std::string filename = playlistName.toStdString() + ".txt";
+        std::string filename = playlistName.toStdString();
         std::string playlistPath = PLAYLIST_DIR_PATH + "/" + filename;
         fs::createUTF8File(playlistPath);
 

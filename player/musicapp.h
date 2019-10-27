@@ -9,6 +9,8 @@
 #include <QMediaPlayer>
 #include <QListWidgetItem>
 #include <QString>
+#include <QPoint>
+#include <QMenu>
 #include "db.h"
 #include "song.h"
 #include "loop.h"
@@ -40,12 +42,16 @@ public slots:
     void onSendPlaylist(std::pair<QString, std::vector<std::string>> received) noexcept;
     void onPlaylistClicked(QListWidgetItem* item) noexcept;
     void onPlaylistDBClicked(QListWidgetItem* item) noexcept;
+    void onRightClick(QPoint point) noexcept;
+    void onAddToClicked(QString text) noexcept;
+    void addSongToPlaylist(QString song, QString playlist) noexcept;
 
 private:
     bool isPlaying = false;
     int currentPlayingId = 0;
+    std::string activePlaylist = "";
     std::unordered_map<std::string, std::shared_ptr<Song>> songsMap;
-    std::unordered_map<std::string, std::vector<std::string>> playlistsMap;
+    std::unordered_map<std::string, std::vector<std::string>> playlistsMap; // why not use shared ptr's instead of string here?
 
     std::unique_ptr<Ui::MusicApp> ui;
     std::unique_ptr<QMediaPlayer> player;
@@ -54,10 +60,14 @@ private:
     std::unique_ptr<Shuffle> shuffle;
     std::unique_ptr<DB> dbPtr;
     std::unique_ptr<CreatePlaylistForm> form;
+    std::shared_ptr<QMenu> mainMenu;
+    std::shared_ptr<QMenu> listOfPlaylistMenu;
 
     void changeTitle() noexcept;
     void loadAllSongsToSongsMap(const int& id) noexcept;
     void reloadListOfSongsView() noexcept;
+    void reloadListOfPlaylistSongsView(const std::string& playlist) noexcept;
+    void addPlaylistsToMenuActions(const std::string &oneItem = "") noexcept;
 };
 
 #endif // MUSICAPP_H

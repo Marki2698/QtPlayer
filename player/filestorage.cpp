@@ -29,6 +29,12 @@ void FileStorage::insertSongsPathes(const std::vector<std::string>& songs) noexc
     closeFileStream();
 }
 
+void FileStorage::insertSongToPlaylist(const QString &song, const QString &playlist) noexcept {
+    openFileStream(playlistsDir + "/" + playlist.toStdString());
+    stubFile << song.toStdString() << std::endl;
+    closeFileStream();
+}
+
 std::vector<std::string> FileStorage::getSongsPathes() noexcept {
     std::vector<std::string> pathes;
     std::string path;

@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     filestorage.cpp \
     loop.cpp \
     shuffle.cpp \
-    createplaylistform.cpp
+    createplaylistform.cpp \
+    menubuilder.cpp
 
 HEADERS  += musicapp.h \
     fs.h \
@@ -34,7 +35,8 @@ HEADERS  += musicapp.h \
     loop.h \
     shuffle.h \
     utils.h \
-    createplaylistform.h
+    createplaylistform.h \
+    menubuilder.h
 
 FORMS    += musicapp.ui \
     createplaylistform.ui

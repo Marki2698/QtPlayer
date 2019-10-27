@@ -16,6 +16,7 @@ public:
     FileStorage(std::string songFile, std::string playDir): songsFileName(songFile), playlistsDir(playDir) {}
     ~FileStorage() {}
     void insertSongsPathes(const std::vector<std::string> &songs) noexcept;
+    void insertSongToPlaylist(const QString& song, const QString& playlist) noexcept;
     std::vector<std::string> getSongsPathes() noexcept;
     std::unordered_map<std::string, std::vector<std::string>> getPlaylistsSongsPathes() noexcept;
     void deleteSongsPathes(const QStringList &absPathesToSongs) noexcept;

@@ -32,6 +32,10 @@ void DB::addSongsPathes(const std::vector<std::string>& songs) const noexcept {
     storage->insertSongsPathes(songs);
 }
 
+void DB::addSongToPlaylist(const QString &song, const QString &playlist) const noexcept {
+    storage->insertSongToPlaylist(song, playlist);
+}
+
 std::vector<std::string> DB::getSongsPathes() const noexcept {
     return storage->getSongsPathes();
 }

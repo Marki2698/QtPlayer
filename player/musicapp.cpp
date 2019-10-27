@@ -10,10 +10,13 @@
 #include "taglib/audioproperties.h"
 #include "utils.h"
 #include "createplaylistform.h"
+#include "menubuilder.h"
 
 #include <iostream>
 #include <memory>
 #include <utility>
+#include <fstream>
+#include <string>
 
 #include <QString>
 #include <QStringList>
@@ -29,8 +32,9 @@
 #include <QUrl>
 #include <QPixmap>
 #include <Qt>
-#include <fstream>
-#include <string>
+#include <QMenu>
+#include <QAction>
+#include <QSignalMapper>
 
 
 MusicApp::MusicApp(QWidget *parent) :
@@ -39,13 +43,16 @@ MusicApp::MusicApp(QWidget *parent) :
     player(make_unique<QMediaPlayer>()),
     loop(make_unique<Loop>()),
     shuffle(make_unique<Shuffle>()),
-    dbPtr(make_unique<DB>(STUB_FILE_PATH, PLAYLIST_DIR_PATH))
+    dbPtr(make_unique<DB>(STUB_FILE_PATH, PLAYLIST_DIR_PATH)),
+    mainMenu(make_unique<QMenu>(this)),
+    playlist(make_unique<QMediaPlaylist>())
 {
     fs::createUTF8File(STUB_FILE_PATH);
     fs::createPlaylistFolder(PLAYLIST_DIR_PATH);
 
+
     ui->setupUi(this);
-    ui->listOfSongs->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    listOfPlaylistMenu = MenuBuilder::createSubMenu(mainMenu, "Add to playlist");
 
     songsMap = Song::getSongsMap(dbPtr->getSongsPathes());
     playlistsMap = dbPtr->getPlaylistsSongsPathes();
@@ -54,15 +61,18 @@ MusicApp::MusicApp(QWidget *parent) :
         ui->listOfPlaylists->addItem(QString(playlist.first.c_str()));
     }
 
-    playlist = make_unique<QMediaPlaylist>();
+    // move to separate method and call every time I create new playlist
+    addPlaylistsToMenuActions();
 
     player->setPlaylist(playlist.get());
     loadAllSongsToSongsMap(player->playlist()->currentIndex());
 
-    form = make_unique<CreatePlaylistForm>(ui->listOfSongs);
+
+    ui->listOfSongs->setContextMenuPolicy(Qt::CustomContextMenu);
 
 
     connect(ui->listOfSongs, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDBClicked(QListWidgetItem*)));
+    connect(ui->listOfSongs, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClick(QPoint)));
     connect(ui->playAndPause, SIGNAL(clicked()), this, SLOT(onPlayPauseClick()));
     connect(ui->nextSong, SIGNAL(clicked()), this, SLOT(onNextSongClick()));
     connect(ui->prevSong, SIGNAL(clicked()), this, SLOT(onPrevSongClick()));
@@ -71,7 +81,6 @@ MusicApp::MusicApp(QWidget *parent) :
     connect(playlist.get(), SIGNAL(currentIndexChanged(int)), this, SLOT(onCurrentMediaChanged(int)));
     connect(ui->listOfPlaylists, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(onPlaylistClicked(QListWidgetItem*)));
     connect(ui->listOfPlaylists, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onPlaylistDBClicked(QListWidgetItem*)));
-    connect(form.get(), SIGNAL(sendPlaylistToMain(std::pair<QString, std::vector<std::string> >)), this, SLOT(onSendPlaylist(std::pair<QString, std::vector<std::string> >)));
 }
 
 void MusicApp::changeTitle() noexcept {
@@ -98,6 +107,30 @@ void MusicApp::onItemDBClicked(QListWidgetItem* item) noexcept {
     player->play();
 
     ui->playAndPause->setIcon(QPixmap(":/recources/images/pause.png"));
+}
+
+void MusicApp::onRightClick(QPoint point) noexcept {
+    mainMenu->popup(ui->listOfSongs->viewport()->mapToGlobal(point));
+}
+
+
+void MusicApp::addSongToPlaylist(QString song, QString playlist) noexcept {
+    std::string playlistName = playlist.toStdString();
+
+    dbPtr->addSongToPlaylist(song, playlist);
+    auto playlistOccurancy = playlistsMap.find(playlistName);
+    playlistOccurancy->second.emplace_back(song.toStdString());
+    // set global checker for plalist
+    if (activePlaylist == playlistName) {
+        reloadListOfPlaylistSongsView(playlistName);
+    }
+}
+
+void MusicApp::onAddToClicked(QString text) noexcept {
+    QString song = ui->listOfSongs->selectedItems().first()->text();
+    addSongToPlaylist(song, text);
+    // reload playlist
+    reloadListOfPlaylistSongsView(text.toStdString());
 }
 
 void MusicApp::onPlayPauseClick() noexcept {
@@ -147,6 +180,24 @@ void MusicApp::reloadListOfSongsView() noexcept {
     }
 }
 
+void MusicApp::reloadListOfPlaylistSongsView(const std::string &playlist) noexcept {
+    ui->listOfSongsInPlaylist->clear();
+    auto occurancy = playlistsMap.find(playlist);
+    for (auto song : occurancy->second) {
+        ui->listOfSongsInPlaylist->addItem(QString(song.c_str()));
+    }
+}
+
+void MusicApp::addPlaylistsToMenuActions(const std::string& oneItem) noexcept {
+    QList<QAction*> listOfActions = oneItem.empty() ? MenuBuilder::addActionsToMenu(listOfPlaylistMenu, playlistsMap) : MenuBuilder::addActionsToMenu(listOfPlaylistMenu, oneItem);
+    for (QAction* playlistAction : listOfActions) {
+        QSignalMapper* mapper = new QSignalMapper(this);
+        connect(playlistAction, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+        mapper->setMapping(playlistAction, playlistAction->text());
+        connect(mapper, SIGNAL(mapped(QString)), this, SLOT(onAddToClicked(QString)));
+    }
+}
+
 void MusicApp::on_addMusic_triggered() noexcept {
     QStringList songAbsPathes = fs::chooseSongsToAdd(this);
 
@@ -171,13 +222,18 @@ void MusicApp::on_addMusic_triggered() noexcept {
 }
 
 void MusicApp::on_addPlaylist_triggered() noexcept {
+    form = make_unique<CreatePlaylistForm>(ui->listOfSongs);
+    connect(form.get(), SIGNAL(sendPlaylistToMain(std::pair<QString, std::vector<std::string> >)), this, SLOT(onSendPlaylist(std::pair<QString, std::vector<std::string> >)));
     form->show();
 }
 
 void MusicApp::onSendPlaylist(std::pair<QString, std::vector<std::string> > received) noexcept {
     ui->listOfPlaylists->addItem(received.first);
-    playlistsMap.insert({received.first.toStdString(), received.second});
-//    std::copy(received.second.cbegin(), received.second.cend(), std::ostream_iterator<std::string>(std::cout, "\n"));
+
+    std::pair<std::string, std::vector<std::string>> item {received.first.toStdString(), received.second};
+    playlistsMap.insert(item);
+
+    addPlaylistsToMenuActions(item.first);
 }
 
 void MusicApp::onPlaylistClicked(QListWidgetItem *item) noexcept {
@@ -189,9 +245,12 @@ void MusicApp::onPlaylistClicked(QListWidgetItem *item) noexcept {
 }
 
 void MusicApp::onPlaylistDBClicked(QListWidgetItem *item) noexcept {
+    std::string playlistName = item->text().toStdString();
+    activePlaylist = playlistName;
+
     player->playlist()->clear();
 
-    std::vector<std::string> songs = playlistsMap.find(item->text().toStdString())->second;
+    std::vector<std::string> songs = playlistsMap.find(playlistName)->second;
     for (auto& song : songs) {
         auto songData = songsMap.find(song)->second;
         playlist->addMedia(QUrl::fromLocalFile(songData->getQStrPath()));
