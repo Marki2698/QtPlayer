@@ -36,7 +36,8 @@ HEADERS  += musicapp.h \
     shuffle.h \
     utils.h \
     createplaylistform.h \
-    menubuilder.h
+    menubuilder.h \
+    types.h
 
 FORMS    += musicapp.ui \
     createplaylistform.ui

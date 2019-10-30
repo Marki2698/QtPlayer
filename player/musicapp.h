@@ -16,6 +16,7 @@
 #include "loop.h"
 #include "shuffle.h"
 #include "createplaylistform.h"
+#include "types.h"
 
 namespace Ui {
 class MusicApp;
@@ -39,7 +40,7 @@ public slots:
     void onLoopBtnClick() noexcept;
     void onShuffleBtnClick() noexcept;
     void onCurrentMediaChanged(int id) noexcept;
-    void onSendPlaylist(std::pair<QString, std::vector<std::string>> received) noexcept;
+    void onSendPlaylist(std::pair<QString, songsVectorT> received) noexcept;
     void onPlaylistClicked(QListWidgetItem* item) noexcept;
     void onPlaylistDBClicked(QListWidgetItem* item) noexcept;
     void onRightClick(QPoint point) noexcept;
@@ -50,8 +51,9 @@ private:
     bool isPlaying = false;
     int currentPlayingId = 0;
     std::string activePlaylist = "";
-    std::unordered_map<std::string, std::shared_ptr<Song>> songsMap;
-    std::unordered_map<std::string, std::vector<std::string>> playlistsMap; // why not use shared ptr's instead of string here?
+
+    songsMapT<std::shared_ptr<Song>> songsMap;
+    playlistMapT playlistsMap;
 
     std::unique_ptr<Ui::MusicApp> ui;
     std::unique_ptr<QMediaPlayer> player;
@@ -68,6 +70,9 @@ private:
     void reloadListOfSongsView() noexcept;
     void reloadListOfPlaylistSongsView(const std::string& playlist) noexcept;
     void addPlaylistsToMenuActions(const std::string &oneItem = "") noexcept;
+    inline QList<QAction*> buildListOfActions(const std::string& item) noexcept;
+    inline QPixmap setPlayingIcon(const bool& isPlayling) noexcept;
+
 };
 
 #endif // MUSICAPP_H

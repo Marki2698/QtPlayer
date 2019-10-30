@@ -21,7 +21,7 @@ void FileStorage::closeFileStream() noexcept {
     if (stubFile.is_open()) stubFile.close();
 }
 
-void FileStorage::insertSongsPathes(const std::vector<std::string>& songs) noexcept {
+void FileStorage::insertSongsPathes(const songsVectorT &songs) noexcept {
     openFileStream(songsFileName);
     for (const auto& path : songs) {
         stubFile << path << "\n";
@@ -35,7 +35,7 @@ void FileStorage::insertSongToPlaylist(const QString &song, const QString &playl
     closeFileStream();
 }
 
-std::vector<std::string> FileStorage::getSongsPathes() noexcept {
+songsVectorT FileStorage::getSongsPathes() noexcept {
     std::vector<std::string> pathes;
     std::string path;
 
@@ -49,17 +49,17 @@ std::vector<std::string> FileStorage::getSongsPathes() noexcept {
     return pathes;
 }
 
-std::unordered_map<std::string, std::vector<std::string>> FileStorage::getPlaylistsSongsPathes() noexcept {
+playlistMapT FileStorage::getPlaylistsSongsPathes() noexcept {
     QDir dir(playlistsDir.c_str());
     QFileInfoList listOfFiles  = dir.entryInfoList(QDir::Files);
 
-    std::unordered_map<std::string, std::vector<std::string>> playlistsMap;
+    playlistMapT playlistsMap;
 
     for (QFileInfo item : listOfFiles) {
 
         openFileStream((playlistsDir + "/" + item.fileName().toStdString()));
         std::string path;
-        std::vector<std::string> pathes;
+        songsVectorT pathes;
 
         while(std::getline(stubFile, path)) {
             pathes.emplace_back(path);

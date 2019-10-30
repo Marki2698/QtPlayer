@@ -4,6 +4,7 @@
 #include "storage.h"
 #include "filestorage.h"
 #include "utils.h"
+//#include "types.h"
 
 #include <fstream>
 #include <iostream>
@@ -28,7 +29,7 @@ DB::~DB() noexcept {
 }
 
 // rename to addSongs
-void DB::addSongsPathes(const std::vector<std::string>& songs) const noexcept {
+void DB::addSongsPathes(const songsVectorT &songs) const noexcept {
     storage->insertSongsPathes(songs);
 }
 
@@ -36,11 +37,11 @@ void DB::addSongToPlaylist(const QString &song, const QString &playlist) const n
     storage->insertSongToPlaylist(song, playlist);
 }
 
-std::vector<std::string> DB::getSongsPathes() const noexcept {
+songsVectorT DB::getSongsPathes() const noexcept {
     return storage->getSongsPathes();
 }
 
-std::unordered_map<std::string, std::vector<std::string>> DB::getPlaylistsSongsPathes() const noexcept {
+songsMapT<> DB::getPlaylistsSongsPathes() const noexcept {
     return storage->getPlaylistsSongsPathes();
 }
 

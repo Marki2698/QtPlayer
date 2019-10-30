@@ -16,7 +16,7 @@ std::shared_ptr<QMenu> MenuBuilder::createSubMenu(std::shared_ptr<QMenu> baseMen
     return subMenu;
 }
 
-QList<QAction*> MenuBuilder::addActionsToMenu(std::shared_ptr<QMenu> menu, const std::unordered_map<std::string, std::vector<std::string> >& playlistsMap) noexcept {
+QList<QAction*> MenuBuilder::addActionsToMenu(std::shared_ptr<QMenu> menu, const songsMapT<> &playlistsMap) noexcept {
     QList<QAction*> listOfActions;
 
     for (const auto& playlist : playlistsMap) {

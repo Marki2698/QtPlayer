@@ -5,13 +5,15 @@
 #include <QPixmap>
 #include <vector>
 
+#include "types.h"
+
 class Shuffle {
 public:
     Shuffle() {}
     ~Shuffle() {}
-    std::pair<QMediaPlaylist::PlaybackMode, QPixmap> nextShuffleMode() noexcept;
+    playModeAndPixMapT nextShuffleMode() noexcept;
 private:
-    std::vector<std::pair<QMediaPlaylist::PlaybackMode, QPixmap>> modes {
+    std::vector<playModeAndPixMapT> modes {
         { QMediaPlaylist::PlaybackMode::Sequential, QPixmap(":/recources/images/shuffle_off.png") },
         { QMediaPlaylist::PlaybackMode::Random, QPixmap(":/recources/images/shuffle_on.png") }
     };

@@ -15,6 +15,7 @@
 #include "song.h"
 #include "fs.h"
 #include "db.h"
+#include "types.h"
 
 CreatePlaylistForm::CreatePlaylistForm(QListWidget* const songList, QWidget *parent) :
     QDialog(parent),
@@ -62,7 +63,7 @@ void CreatePlaylistForm::onCreateClicked() noexcept {
         std::string defaultPath = "";
         std::unique_ptr<DB> db = make_unique<DB>(playlistPath, defaultPath);
 
-        std::vector<std::string> pathes{};
+        songsVectorT pathes{};
 
 
         if (!ui->listOfSongs->selectedItems().empty()) {

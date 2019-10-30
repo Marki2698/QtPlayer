@@ -4,14 +4,15 @@
 #include <QMediaPlaylist>
 #include <QPixmap>
 #include <vector>
+#include "types.h"
 
 class Loop {
 public:
     Loop() {}
     ~Loop() {}
-    std::pair<QMediaPlaylist::PlaybackMode, QPixmap> nextLoopMode() noexcept;
+    playModeAndPixMapT nextLoopMode() noexcept;
 private:
-    std::vector<std::pair<QMediaPlaylist::PlaybackMode, QPixmap>> modes {
+    std::vector<playModeAndPixMapT> modes {
         { QMediaPlaylist::PlaybackMode::Sequential, QPixmap(":/recources/images/loop_off.png") },
         { QMediaPlaylist::PlaybackMode::Loop, QPixmap(":/recources/images/loop.png") },
         { QMediaPlaylist::PlaybackMode::CurrentItemInLoop, QPixmap(":/recources/images/loop_one.png") }

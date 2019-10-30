@@ -4,7 +4,7 @@
 #include "statuses.h"
 #include "song.h"
 #include "storage.h"
-//#include "fs.h"
+#include "types.h"
 
 #include <fstream>
 #include <memory>
@@ -27,10 +27,11 @@ public:
     DB(const DB&& source) = delete;
     DB& operator= (const DB&& source) = delete;
     ~DB() noexcept;
-    void addSongsPathes(const std::vector<std::string>& songs) const noexcept;
+
+    void addSongsPathes(const songsVectorT& songs) const noexcept;
     void addSongToPlaylist(const QString& song, const QString& playlist) const noexcept;
-    std::vector<std::string> getSongsPathes() const noexcept;
-    std::unordered_map<std::string, std::vector<std::string>> getPlaylistsSongsPathes() const noexcept;
+    songsVectorT getSongsPathes() const noexcept;
+    songsMapT<> getPlaylistsSongsPathes() const noexcept;
     void removeSongs(const QStringList& absPathesToSongs) const noexcept;
 private:
     std::unique_ptr<AbstractStorage> storage;
