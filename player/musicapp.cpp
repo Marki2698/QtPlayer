@@ -1,3 +1,5 @@
+#include "types.h"
+
 #include "musicapp.h"
 #include "ui_musicapp.h"
 #include "fs.h"
@@ -11,30 +13,6 @@
 #include "utils.h"
 #include "createplaylistform.h"
 #include "menubuilder.h"
-
-#include <iostream>
-#include <memory>
-#include <utility>
-#include <fstream>
-#include <string>
-
-#include <QString>
-#include <QStringList>
-#include <QList>
-#include <QMediaPlayer>
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
-#include <QListWidgetItem>
-#include <QStringListModel>
-#include <QMediaMetaData>
-#include <QMediaPlaylist>
-#include <QUrl>
-#include <QPixmap>
-#include <Qt>
-#include <QMenu>
-#include <QAction>
-#include <QSignalMapper>
 
 
 MusicApp::MusicApp(QWidget *parent) :
@@ -107,6 +85,7 @@ void MusicApp::onItemDBClicked(QListWidgetItem* item) noexcept {
     player->play();
 
     ui->playAndPause->setIcon(QPixmap(":/recources/images/pause.png"));
+    changeTitle();
 }
 
 void MusicApp::onRightClick(QPoint point) noexcept {
@@ -135,11 +114,11 @@ void MusicApp::onAddToClicked(QString text) noexcept {
 
 void MusicApp::onPlayPauseClick() noexcept {
     isPlaying = !isPlaying;
+
     if (isPlaying) player->play();
     else player->pause();
 
-    QPixmap icon = setPlayingIcon(isPlaying);
-    ui->playAndPause->setIcon(icon);
+    ui->playAndPause->setIcon(setPlayingIcon(isPlaying));
 }
 
 inline QPixmap MusicApp::setPlayingIcon(const bool& isPlayling) noexcept {

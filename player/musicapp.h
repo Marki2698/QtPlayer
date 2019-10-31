@@ -1,22 +1,14 @@
 #ifndef MUSICAPP_H
 #define MUSICAPP_H
 
-#include <memory>
-#include <vector>
-#include <string>
-#include <unordered_map>
-#include <QMainWindow>
-#include <QMediaPlayer>
-#include <QListWidgetItem>
-#include <QString>
-#include <QPoint>
-#include <QMenu>
+#include "types.h"
+
 #include "db.h"
 #include "song.h"
 #include "loop.h"
 #include "shuffle.h"
 #include "createplaylistform.h"
-#include "types.h"
+
 
 namespace Ui {
 class MusicApp;

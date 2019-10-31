@@ -1,15 +1,10 @@
 #ifndef CREATEPLAYLISTFORM_H
 #define CREATEPLAYLISTFORM_H
 
-#include <QDialog>
-#include <QListWidget>
-#include <QString>
-
-#include <memory>
-#include <unordered_map>
-#include <string>
+#include "types.h"
 
 #include "song.h"
+
 
 namespace Ui {
 class CreatePlaylistForm;

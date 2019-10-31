@@ -1,11 +1,8 @@
 #ifndef SHUFFLE_H
 #define SHUFFLE_H
 
-#include <QMediaPlaylist>
-#include <QPixmap>
-#include <vector>
-
 #include "types.h"
+
 
 class Shuffle {
 public:

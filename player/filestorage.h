@@ -1,15 +1,9 @@
 #ifndef FILESTORAGE_H
 #define FILESTORAGE_H
 
-#include "storage.h"
 #include "types.h"
 
-#include <QStringList>
-#include <vector>
-#include <memory>
-#include <fstream>
-#include <string>
-#include <unordered_map>
+#include "storage.h"
 
 
 class FileStorage: public AbstractStorage {

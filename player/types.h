@@ -4,9 +4,32 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <memory>
+#include <utility>
+#include <fstream>
 
+
+#include <QDialog>
+#include <QListWidget>
 #include <QPixmap>
 #include <QMediaPlaylist>
+#include <QString>
+#include <QStringList>
+#include <QList>
+#include <QMediaPlayer>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
+#include <QMainWindow>
+#include <QListWidgetItem>
+#include <QStringListModel>
+#include <QMediaMetaData>
+#include <QUrl>
+#include <Qt>
+#include <QMenu>
+#include <QAction>
+#include <QSignalMapper>
 
 using namespace std;
 

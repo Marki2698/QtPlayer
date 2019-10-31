@@ -1,18 +1,12 @@
 #ifndef DB_H
 #define DB_H
 
+
+#include "types.h"
+
 #include "statuses.h"
 #include "song.h"
 #include "storage.h"
-#include "types.h"
-
-#include <fstream>
-#include <memory>
-#include <vector>
-#include <unordered_map>
-#include <string>
-
-#include <QStringList>
 
 
 class DB

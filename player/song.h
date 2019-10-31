@@ -1,12 +1,8 @@
 #ifndef SONG_H
 #define SONG_H
 
-#include <QMediaPlayer>
-#include <QString>
-#include <string>
-#include <iostream>
-#include <unordered_map>
-#include <memory>
+#include "types.h"
+
 
 using WideStream = std::basic_ostream<wchar_t>;
 

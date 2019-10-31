@@ -1,10 +1,10 @@
 #ifndef FS_H
 #define FS_H
 
+#include "types.h"
 
-#include <string>
-#include <QStringList>
 #include "musicapp.h"
+
 
 const std::string STUB_FILE_PATH = "songs";
 const std::string PLAYLIST_DIR_PATH = "playlists";

@@ -1,13 +1,9 @@
 #ifndef MENUBUILDER_H
 #define MENUBUILDER_H
-#include <QMenu>
-#include <unordered_map>
-#include <vector>
-#include <string>
-#include <memory>
+
+#include "types.h"
 
 #include "musicapp.h"
-#include "types.h"
 
 
 namespace MenuBuilder {

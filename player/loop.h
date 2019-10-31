@@ -1,10 +1,8 @@
 #ifndef LOOP_H
 #define LOOP_H
 
-#include <QMediaPlaylist>
-#include <QPixmap>
-#include <vector>
 #include "types.h"
+
 
 class Loop {
 public:

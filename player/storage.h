@@ -1,12 +1,10 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
+#include "types.h"
+
 #include "song.h"
 
-#include <memory>
-#include <vector>
-#include <unordered_map>
-#include<QStringList>
 
 class AbstractStorage {
 public:
