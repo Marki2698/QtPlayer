@@ -27,6 +27,7 @@ public:
     songsVectorT getSongsPathes() const noexcept;
     songsMapT<> getPlaylistsSongsPathes() const noexcept;
     void removeSongs(const QStringList& absPathesToSongs) const noexcept;
+    void removePlaylist(const QString& playlistName) const noexcept;
 private:
     std::unique_ptr<AbstractStorage> storage;
 };

@@ -25,7 +25,7 @@ public slots:
     void onCreateClicked() noexcept;
 
 signals:
-    void sendPlaylistToMain(std::pair<QString, std::vector<std::string>>);
+    void sendPlaylistToMain(std::pair<QString, songsVectorT>);
 
 private:
     std::unique_ptr<Ui::CreatePlaylistForm> ui;

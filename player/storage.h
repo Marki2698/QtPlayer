@@ -15,6 +15,7 @@ public:
     virtual std::vector<std::string> getSongsPathes() = 0;
     virtual std::unordered_map<std::string, std::vector<std::string>> getPlaylistsSongsPathes() = 0;
     virtual void deleteSongsPathes(const QStringList& absPathesToSongs) = 0;
+    virtual void deletePlaylistPathes(const QString& playlistName) = 0;
 };
 
 #endif // STORAGE_H

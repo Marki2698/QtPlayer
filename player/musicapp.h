@@ -38,6 +38,8 @@ public slots:
     void onRightClick(QPoint point) noexcept;
     void onAddToClicked(QString text) noexcept;
     void addSongToPlaylist(QString song, QString playlist) noexcept;
+    void onRemovePlaylistClicked(bool triggered) noexcept;
+    void onPlaylistSongDBClicked(QListWidgetItem* item) noexcept;
 
 private:
     bool isPlaying = false;
@@ -56,14 +58,23 @@ private:
     std::unique_ptr<CreatePlaylistForm> form;
     std::shared_ptr<QMenu> mainMenu;
     std::shared_ptr<QMenu> listOfPlaylistMenu;
+    std::shared_ptr<QMenu> playlistMenu;
+    std::shared_ptr<QMenu> songInPlaylistMenu;
+    QList<QAction*> listOfSongsMenuActions;
+    QList<QAction*> playlistsActions;
 
     void changeTitle() noexcept;
-    void loadAllSongsToSongsMap(const int& id) noexcept;
+    void loadAllSongsToPlayer(const int& id) noexcept;
     void reloadListOfSongsView() noexcept;
     void reloadListOfPlaylistSongsView(const std::string& playlist) noexcept;
     void addPlaylistsToMenuActions(const std::string &oneItem = "") noexcept;
+    void setPlaylistForPlayer(const std::string& playlistName) noexcept;
     inline QList<QAction*> buildListOfActions(const std::string& item) noexcept;
     inline QPixmap setPlayingIcon(const bool& isPlayling) noexcept;
+    inline void setActivePlaylist(const std::string& name) noexcept;
+    inline void setPlayingStatus(bool&& status) noexcept;
+    inline void setCurrentPlayIndex(const int& id) noexcept;
+    inline void setIconAndPlay() noexcept;
 
 };
 

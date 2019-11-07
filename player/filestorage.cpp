@@ -3,14 +3,16 @@
 #include "song.h"
 #include "storage.h"
 
-#include <fstream>
-#include <vector>
-#include <memory>
-#include <QStringList>
-#include <QDir>
-#include <string>
-#include <iostream>
-#include <unordered_map>
+//#include <fstream>
+//#include <vector>
+//#include <memory>
+//#include <QStringList>
+//#include <QDir>
+//#include <string>
+//#include <iostream>
+//#include <unordered_map>
+
+#include <cstdio>
 
 void FileStorage::openFileStream(const std::string& fileName) noexcept {
     std::cout << fileName << std::endl;
@@ -80,4 +82,8 @@ bool FileStorage::isEmpty(std::fstream &fileStream) const noexcept {
 
 void FileStorage::deleteSongsPathes(const QStringList &absPathesToSongs) noexcept {
 
+}
+
+void FileStorage::deletePlaylistPathes(const QString &playlistName) noexcept {
+    std::remove((playlistsDir + "/" + playlistName.toStdString()).c_str());
 }

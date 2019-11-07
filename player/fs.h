@@ -6,7 +6,7 @@
 #include "musicapp.h"
 
 
-const std::string STUB_FILE_PATH = "songs";
+const std::string SONGS_FILE_PATH = "songs";
 const std::string PLAYLIST_DIR_PATH = "playlists";
 
 class fs

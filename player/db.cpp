@@ -49,5 +49,9 @@ void DB::removeSongs(const QStringList &absPathesToSongs) const noexcept{
     storage->deleteSongsPathes(absPathesToSongs);
 }
 
+void DB::removePlaylist(const QString &playlistName) const noexcept {
+    storage->deletePlaylistPathes(playlistName);
+}
+
 
 

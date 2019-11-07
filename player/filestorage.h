@@ -15,6 +15,7 @@ public:
     songsVectorT getSongsPathes() noexcept;
     playlistMapT getPlaylistsSongsPathes() noexcept;
     void deleteSongsPathes(const QStringList &absPathesToSongs) noexcept;
+    void deletePlaylistPathes(const QString& playlistName) noexcept;
     bool isEmpty(std::fstream& fileStream) const noexcept;
 
 private:
