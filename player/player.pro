@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     loop.cpp \
     shuffle.cpp \
     createplaylistform.cpp \
-    menubuilder.cpp
+    menubuilder.cpp \
+    removesongsform.cpp
 
 HEADERS  += musicapp.h \
     fs.h \
@@ -37,10 +38,12 @@ HEADERS  += musicapp.h \
     utils.h \
     createplaylistform.h \
     menubuilder.h \
-    types.h
+    types.h \
+    removesongsform.h
 
 FORMS    += musicapp.ui \
-    createplaylistform.ui
+    createplaylistform.ui \
+    removesongsform.ui
 
 LIBS += -ltag
 

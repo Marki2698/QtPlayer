@@ -10,12 +10,13 @@ class AbstractStorage {
 public:
     AbstractStorage() {}
     virtual ~AbstractStorage() {}
-    virtual void insertSongsPathes(const std::vector<std::string> &songs) = 0;
-    virtual void insertSongToPlaylist(const QString& song, const QString& playlist) = 0;
-    virtual std::vector<std::string> getSongsPathes() = 0;
-    virtual std::unordered_map<std::string, std::vector<std::string>> getPlaylistsSongsPathes() = 0;
-    virtual void deleteSongsPathes(const QStringList& absPathesToSongs) = 0;
-    virtual void deletePlaylistPathes(const QString& playlistName) = 0;
+    virtual void addSongs(const songsVectorT &songs) = 0;
+    virtual void addPlaylist(const QString& playlistName, const songsVectorT& songs) = 0;
+    virtual void addSongToPlaylist(const QString& song, const QString& playlist) = 0;
+    virtual songsMapT* getSongs() = 0;
+    virtual playlistMapT* getPlaylists() = 0;
+    virtual void deleteSongs(const QStringList& absPathesToSongs) = 0;
+    virtual void deletePlaylist(const QString& playlistName) = 0;
 };
 
 #endif // STORAGE_H

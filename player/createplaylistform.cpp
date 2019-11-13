@@ -1,13 +1,4 @@
-#include <QListWidget>
-#include <QStringList>
-#include <QString>
-
-#include <unordered_map>
-#include <string>
-#include <memory>
-#include <vector>
-#include <algorithm>
-#include <iostream>
+#include "types.h"
 
 #include "createplaylistform.h"
 #include "ui_createplaylistform.h"
@@ -15,11 +6,12 @@
 #include "song.h"
 #include "fs.h"
 #include "db.h"
-#include "types.h"
 
-CreatePlaylistForm::CreatePlaylistForm(QListWidget* const songList, QWidget *parent) :
+
+CreatePlaylistForm::CreatePlaylistForm(QListWidget* const songList, std::shared_ptr<DB> dbPtr, QWidget *parent) :
     QDialog(parent),
-    ui(make_unique<Ui::CreatePlaylistForm>())
+    ui(make_unique<Ui::CreatePlaylistForm>()),
+    db(dbPtr)
 {
     ui->setupUi(this);
 
@@ -56,26 +48,21 @@ void CreatePlaylistForm::onCancelClicked() noexcept {
 void CreatePlaylistForm::onCreateClicked() noexcept {
     if (ui->nameOfPlaylist->text().size() != 0) {
         QString playlistName = ui->nameOfPlaylist->text();
-        std::string filename = playlistName.toStdString();
-        std::string playlistPath = PLAYLIST_DIR_PATH + "/" + filename;
-        fs::createUTF8File(playlistPath);
 
-        std::string defaultPath = "";
-        std::unique_ptr<DB> db = make_unique<DB>(playlistPath, defaultPath);
-
-        songsVectorT pathes{};
+        songsVectorT songs{};
 
 
         if (!ui->listOfSongs->selectedItems().empty()) {
             for (auto item: ui->listOfSongs->selectedItems()) {
-                pathes.emplace_back(item->text().toStdString());
+                songs.emplace_back(item->text().toStdString());
             }
         }
 
 
-        db->addSongsPathes(pathes);
+        db->addPlaylist(playlistName, songs);
 
-        emit sendPlaylistToMain({playlistName, pathes});
+
+        emit sendPlaylistToMain({playlistName, songs});
         this->close();
     }
 

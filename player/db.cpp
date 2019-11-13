@@ -29,28 +29,32 @@ DB::~DB() noexcept {
 }
 
 // rename to addSongs
-void DB::addSongsPathes(const songsVectorT &songs) const noexcept {
-    storage->insertSongsPathes(songs);
+void DB::addSongs(const songsVectorT &songs) const noexcept {
+    storage->addSongs(songs);
 }
 
 void DB::addSongToPlaylist(const QString &song, const QString &playlist) const noexcept {
-    storage->insertSongToPlaylist(song, playlist);
+    storage->addSongToPlaylist(song, playlist);
 }
 
-songsVectorT DB::getSongsPathes() const noexcept {
-    return storage->getSongsPathes();
+void DB::addPlaylist(const QString &playlistName, const songsVectorT &songs) const noexcept {
+    storage->addPlaylist(playlistName, songs);
 }
 
-songsMapT<> DB::getPlaylistsSongsPathes() const noexcept {
-    return storage->getPlaylistsSongsPathes();
+songsMapT* DB::getSongs() const noexcept {
+    return storage->getSongs();
+}
+
+playlistMapT* DB::getPlaylists() const noexcept {
+    return storage->getPlaylists();
 }
 
 void DB::removeSongs(const QStringList &absPathesToSongs) const noexcept{
-    storage->deleteSongsPathes(absPathesToSongs);
+    storage->deleteSongs(absPathesToSongs);
 }
 
 void DB::removePlaylist(const QString &playlistName) const noexcept {
-    storage->deletePlaylistPathes(playlistName);
+    storage->deletePlaylist(playlistName);
 }
 
 

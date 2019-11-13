@@ -8,6 +8,7 @@
 #include <memory>
 #include <utility>
 #include <fstream>
+#include <chrono>
 
 
 #include <QDialog>
@@ -31,16 +32,18 @@
 #include <QAction>
 #include <QSignalMapper>
 
-using namespace std;
+#include "song.h"
 
-using songsVectorT = vector<string>;
-using playlistMapT = unordered_map<string, vector<string>>; // why not use shared ptr's instead of string here?
+//using namespace std;
+
+using songsVectorT = std::vector<std::string>;
+using playlistMapT = std::unordered_map<std::string, std::vector<std::string>>;
 using playlistMapItemT = std::pair<std::string, std::vector<std::string>>;
+using songsMapItemT = std::pair<std::string, std::shared_ptr<Song>>;
 
-template <class T = vector<string>>
-using songsMapT = unordered_map<string, T>;
+using songsMapT = std::unordered_map<std::string, std::shared_ptr<Song>>;
 
-using playModeAndPixMapT = pair<QMediaPlaylist::PlaybackMode, QPixmap>;
+using playModeAndPixMapT = std::pair<QMediaPlaylist::PlaybackMode, QPixmap>;
 
 #endif // TYPES
 

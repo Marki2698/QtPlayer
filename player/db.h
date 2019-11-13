@@ -22,14 +22,17 @@ public:
     DB& operator= (const DB&& source) = delete;
     ~DB() noexcept;
 
-    void addSongsPathes(const songsVectorT& songs) const noexcept;
+    void addSongs(const songsVectorT& songs) const noexcept;
     void addSongToPlaylist(const QString& song, const QString& playlist) const noexcept;
-    songsVectorT getSongsPathes() const noexcept;
-    songsMapT<> getPlaylistsSongsPathes() const noexcept;
+    void addPlaylist(const QString& playlistName, const songsVectorT& songs) const noexcept;
+    songsMapT* getSongs() const noexcept;
+    playlistMapT* getPlaylists() const noexcept;
     void removeSongs(const QStringList& absPathesToSongs) const noexcept;
     void removePlaylist(const QString& playlistName) const noexcept;
 private:
     std::unique_ptr<AbstractStorage> storage;
+    songsMapT songsMap;
+    playlistMapT playlistsMap;
 };
 
 #endif // DB_H

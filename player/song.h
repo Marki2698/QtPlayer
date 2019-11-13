@@ -4,9 +4,6 @@
 #include "types.h"
 
 
-using WideStream = std::basic_ostream<wchar_t>;
-
-
 class Song
 {
 public:

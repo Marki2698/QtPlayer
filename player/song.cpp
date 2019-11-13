@@ -1,11 +1,13 @@
+#include "types.h"
+
 #include "song.h"
-#include <QMediaPlayer>
-#include <iostream>
-#include <chrono>
+//#include <QMediaPlayer>
+//#include <iostream>
+//#include <chrono>
 #include <sstream>
-#include <string>
-#include <memory>
-#include <unordered_map>
+//#include <string>
+//#include <memory>
+//#include <unordered_map>
 #include "taglib/fileref.h"
 #include "taglib/tag.h"
 #include "taglib/audioproperties.h"
@@ -55,8 +57,8 @@ QString Song::show() const noexcept {
     return this->title + this->album + this->artist + this->formatDurationToQString();
 }
 
-std::unordered_map<std::string, std::shared_ptr<Song>> Song::getSongsMap(const std::vector<std::string>& songsPathes) noexcept {
-    std::unordered_map<std::string, std::shared_ptr<Song>> songsMap;
+std::unordered_map<std::string, std::shared_ptr<Song>> Song::getSongsMap(const std::vector<std::string> &songsPathes) noexcept {
+    songsMapT songsMap;
     for (const std::string& path : songsPathes) {
         TagLib::FileRef f(path.c_str());
         if (!f.isNull() && f.tag()) {

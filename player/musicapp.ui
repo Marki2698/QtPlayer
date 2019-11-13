@@ -227,6 +227,7 @@
     </property>
     <addaction name="addMusic"/>
     <addaction name="addPlaylist"/>
+    <addaction name="removeSongsGlobally"/>
    </widget>
    <addaction name="menuMusic"/>
   </widget>
@@ -247,6 +248,11 @@
   <action name="addPlaylist">
    <property name="text">
     <string>Create playlist</string>
+   </property>
+  </action>
+  <action name="removeSongsGlobally">
+   <property name="text">
+    <string>Remove songs</string>
    </property>
   </action>
  </widget>

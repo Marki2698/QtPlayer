@@ -8,6 +8,7 @@
 #include "loop.h"
 #include "shuffle.h"
 #include "createplaylistform.h"
+#include "removesongsform.h"
 
 
 namespace Ui {
@@ -25,7 +26,8 @@ public:
 public slots:
     void on_addMusic_triggered() noexcept;
     void on_addPlaylist_triggered() noexcept;
-    void onItemDBClicked(QListWidgetItem *item) noexcept;
+    void on_removeSongsGlobally_triggered(bool triggered) noexcept;
+    void onSongDBClicked(QListWidgetItem *item) noexcept;
     void onPlayPauseClick() noexcept;
     void onNextSongClick() noexcept;
     void onPrevSongClick() noexcept;
@@ -37,25 +39,28 @@ public slots:
     void onPlaylistDBClicked(QListWidgetItem* item) noexcept;
     void onRightClick(QPoint point) noexcept;
     void onAddToClicked(QString text) noexcept;
-    void addSongToPlaylist(QString song, QString playlist) noexcept;
+    void addSongToPlaylist(const QString &song, const QString &playlist) noexcept;
     void onRemovePlaylistClicked(bool triggered) noexcept;
     void onPlaylistSongDBClicked(QListWidgetItem* item) noexcept;
+    void onNotificationFromRemoveForm() noexcept;
+    void onRemoveOneSongGlobally(bool triggered) noexcept;
 
 private:
     bool isPlaying = false;
     int currentPlayingId = 0;
     std::string activePlaylist = "";
 
-    songsMapT<std::shared_ptr<Song>> songsMap;
-    playlistMapT playlistsMap;
+    songsMapT * songsMap;
+    playlistMapT * playlistsMap;
 
     std::unique_ptr<Ui::MusicApp> ui;
     std::unique_ptr<QMediaPlayer> player;
     std::unique_ptr<QMediaPlaylist> playlist;
     std::unique_ptr<Loop> loop;
     std::unique_ptr<Shuffle> shuffle;
-    std::unique_ptr<DB> dbPtr;
-    std::unique_ptr<CreatePlaylistForm> form;
+    std::shared_ptr<DB> dbPtr; // make shared
+    std::unique_ptr<CreatePlaylistForm> createPlaylistForm;
+    std::unique_ptr<RemoveSongsForm> removeSongsForm;
     std::shared_ptr<QMenu> mainMenu;
     std::shared_ptr<QMenu> listOfPlaylistMenu;
     std::shared_ptr<QMenu> playlistMenu;
@@ -66,7 +71,7 @@ private:
     void changeTitle() noexcept;
     void loadAllSongsToPlayer(const int& id) noexcept;
     void reloadListOfSongsView() noexcept;
-    void reloadListOfPlaylistSongsView(const std::string& playlist) noexcept;
+    void reloadListOfPlaylistSongsView(const std::string& playlist = "") noexcept;
     void addPlaylistsToMenuActions(const std::string &oneItem = "") noexcept;
     void setPlaylistForPlayer(const std::string& playlistName) noexcept;
     inline QList<QAction*> buildListOfActions(const std::string& item) noexcept;

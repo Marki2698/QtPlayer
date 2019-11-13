@@ -8,7 +8,8 @@ class Loop {
 public:
     Loop() {}
     ~Loop() {}
-    playModeAndPixMapT nextLoopMode() noexcept;
+    void nextLoopMode() noexcept;
+    playModeAndPixMapT getCurrentLoopMode() noexcept;
 private:
     std::vector<playModeAndPixMapT> modes {
         { QMediaPlaylist::PlaybackMode::Sequential, QPixmap(":/recources/images/loop_off.png") },
@@ -16,6 +17,7 @@ private:
         { QMediaPlaylist::PlaybackMode::CurrentItemInLoop, QPixmap(":/recources/images/loop_one.png") }
     };
     size_t modeIndex = 1;
+    playModeAndPixMapT currentMode = modes[0];
 };
 
 #endif // LOOP_H

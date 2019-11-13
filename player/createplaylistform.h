@@ -4,6 +4,7 @@
 #include "types.h"
 
 #include "song.h"
+#include "db.h"
 
 
 namespace Ui {
@@ -15,7 +16,7 @@ class CreatePlaylistForm : public QDialog
     Q_OBJECT
 
 public:
-    explicit CreatePlaylistForm(QListWidget* songList, QWidget *parent = 0);
+    explicit CreatePlaylistForm(QListWidget* songList, std::shared_ptr<DB> dbPtr, QWidget *parent = 0);
     ~CreatePlaylistForm();
 
 public slots:
@@ -29,6 +30,7 @@ signals:
 
 private:
     std::unique_ptr<Ui::CreatePlaylistForm> ui;
+    std::shared_ptr<DB> db;
 };
 
 #endif // CREATEPLAYLISTFORM_H
