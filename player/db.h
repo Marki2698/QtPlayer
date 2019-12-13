@@ -8,7 +8,6 @@
 #include "song.h"
 #include "storage.h"
 
-
 class DB
 {
 public:

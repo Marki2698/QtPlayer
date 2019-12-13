@@ -20,6 +20,7 @@ public:
     playlistMapT* getPlaylists() noexcept;
     void deleteSongs(const QStringList &songs) noexcept;
     void deletePlaylist(const QString& playlistName) noexcept;
+
     bool isEmpty(std::fstream& fileStream) const noexcept;
 
 private:

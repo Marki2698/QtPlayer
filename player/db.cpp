@@ -14,6 +14,8 @@
 #include <QStringList>
 
 
+// add monitor
+
 DB::DB() noexcept {
     //default contructor for creating connection with real DB;
     // storage = make_unique<DBStorage>();
@@ -28,7 +30,6 @@ DB::~DB() noexcept {
     std::cout << "close connection" << std::endl;
 }
 
-// rename to addSongs
 void DB::addSongs(const songsVectorT &songs) const noexcept {
     storage->addSongs(songs);
 }

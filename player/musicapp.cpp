@@ -45,6 +45,11 @@ MusicApp::MusicApp(QWidget *parent) :
     songsMap = dbPtr->getSongs();
     playlistsMap = dbPtr->getPlaylists();
 
+
+    QStringList listOfPathes;
+    for (const songsMapItemT& song : *songsMap) listOfPathes.push_back(song.second->getQStrPath());
+
+
     for (const auto& playlist : *playlistsMap) {
         ui->listOfPlaylists->addItem(QString(playlist.first.c_str()));
     }

@@ -71,7 +71,7 @@ songsMapT* FileStorage::getSongs() noexcept {
     return &songsMap;
 }
 
-playlistMapT* FileStorage::getPlaylists() noexcept { // getPlaylists
+playlistMapT* FileStorage::getPlaylists() noexcept {
     QDir dir(playlistsDir.c_str());
     QFileInfoList listOfFiles  = dir.entryInfoList(QDir::Files);
 

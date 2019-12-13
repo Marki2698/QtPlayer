@@ -10,6 +10,7 @@
 #include "createplaylistform.h"
 #include "removesongsform.h"
 
+#include <QFileSystemWatcher>
 
 namespace Ui {
 class MusicApp;
@@ -58,7 +59,7 @@ private:
     std::unique_ptr<QMediaPlaylist> playlist;
     std::unique_ptr<Loop> loop;
     std::unique_ptr<Shuffle> shuffle;
-    std::shared_ptr<DB> dbPtr; // make shared
+    std::shared_ptr<DB> dbPtr;
     std::unique_ptr<CreatePlaylistForm> createPlaylistForm;
     std::unique_ptr<RemoveSongsForm> removeSongsForm;
     std::shared_ptr<QMenu> mainMenu;
@@ -67,6 +68,7 @@ private:
     std::shared_ptr<QMenu> songInPlaylistMenu;
     QList<QAction*> listOfSongsMenuActions;
     QList<QAction*> playlistsActions;
+
 
     void changeTitle() noexcept;
     void loadAllSongsToPlayer(const int& id) noexcept;
